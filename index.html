@@ -1,0 +1,188 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mine Hack Launcher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: black; /* Changed background color to black */
+            color: white;
+            position: relative;
+        }
+        .blink {
+            font-size: 2em;
+            margin: 40px 0; /* Adjusted margin */
+            animation: blink 1s infinite;
+            font-weight: bold; /* Make text bold */
+            background: linear-gradient(90deg, #ff4757, #ffd60a, #1e90ff); /* Colorful gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .new-name {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #ffd60a; /* New name color */
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 50px);
+            gap: 5px;
+            margin: 20px auto;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: lightgray;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+        .mine {
+            background-color: red;
+        }
+        #clock {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        #loginForm {
+            display: none;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff4757;
+            color: white;
+            cursor: pointer;
+        }
+        .telegram-button {
+            margin-top: 20px;
+            background-color: #0088cc; /* Telegram blue */
+        }
+    </style>
+</head>
+<body>
+
+<div class="blink">RAJ-XNETWORK</div>
+<h1>Mine Game</h1>
+<div id="clock"></div>
+
+<div class="new-name">@cyber_raj1</div> <!-- @cyber_raj1 -->
+
+<div id="loginForm">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="USERNAME" required>
+    <input type="password" id="password" placeholder="PASSWORD" required>
+    <button id="loginButton">Login</button>
+</div>
+
+<div class="grid" id="grid" style="display: none;"></div>
+<button id="resetButton" style="display: none;">New Result</button>
+
+<a href="https://t.me/freeinternetworld123" target="_blank">
+    <button class="telegram-button">Telegram</button>
+</a>
+
+<script>
+    const gridElement = document.getElementById('grid');
+    const resetButton = document.getElementById('resetButton');
+    const clockElement = document.getElementById('clock');
+    const loginForm = document.getElementById('loginForm');
+    const loginButton = document.getElementById('loginButton');
+    const gridSize = 5;
+    const mineCount = 10; // Changed to 10 bombs
+    let mines = [];
+
+    function generateMines() {
+        mines = [];
+        while (mines.length < mineCount) {
+            const mineIndex = Math.floor(Math.random() * (gridSize * gridSize));
+            if (!mines.includes(mineIndex)) {
+                mines.push(mineIndex);
+            }
+        }
+        // Always ensure the first mine is at index 0 for visibility
+        mines[0] = 0; // This can be changed to any index you prefer
+    }
+
+    function createGrid() {
+        gridElement.innerHTML = '';
+        generateMines();
+        for (let i = 0; i < gridSize * gridSize; i++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.dataset.index = i;
+
+            // Always reveal the mine at index 0
+            if (mines.includes(i)) {
+                cell.classList.add('mine');
+                cell.textContent = 'Mine';
+            }
+
+            cell.addEventListener('click', () => {
+                if (mines.includes(i)) {
+                    alert('Game Over!');
+                } else {
+                    cell.textContent = 'Safe';
+                }
+            });
+
+            gridElement.appendChild(cell);
+        }
+    }
+
+    function updateClock() {
+        const now = new Date();
+        const dateString = now.toLocaleDateString();
+        const timeString = now.toLocaleTimeString();
+        clockElement.textContent = `${dateString} ${timeString}`;
+    }
+
+    loginButton.addEventListener('click', () => {
+        // Simple login validation
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        if (username === 'Raj' && password === 'Bhai') {
+            loginForm.style.display = 'none';
+            gridElement.style.display = 'grid';
+            resetButton.style.display = 'inline-block';
+            createGrid();
+        } else {
+            alert('Please enter valid credentials');
+        }
+    });
+
+    resetButton.addEventListener('click', createGrid);
+
+    // Show login form initially
+    loginForm.style.display = 'block';
+
+    // Update clock every second
+    setInterval(updateClock, 1000);
+    updateClock(); // Initial call to set clock immediately
+</script>
+
+</body>
+</html>
